@@ -4,11 +4,12 @@ import binascii
 import json
 
 class User:
-    def __init__(self, name, email, password):
+    def __init__(self, name, email, password, tags=None):
         self.name = name
         self.email = email
         self._salt = os.urandom(32)  # Store the salt
         self._password_hash = self._hash_password(password)
+        self.tags = tags if tags is not None else [] # Store the tags associated with the user
     
     @property
     def salt(self):
@@ -42,14 +43,15 @@ class User:
         return json.dumps({
             'name': self.name,
             'email': self.email,
-            'salt': binascii.hexlify(self.salt).decode(),  # Decode to string for JSON serialization
-            'password_hash': self.password_hash  # Already a string due to _hash_password
+            'salt': binascii.hexlify(self.salt).decode(),
+            'password_hash': self.password_hash,
+            'tags': self.tags
         })
 
     @classmethod
     def from_json(cls, json_str):
         data = json.loads(json_str)
-        user = cls(data['name'], data['email'], '')
+        user = cls(data['name'], data['email'], '', data.get('tags', []))
         user.salt = binascii.unhexlify(data['salt'])
         user.password_hash = data['password_hash']
         return user
