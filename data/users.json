@@ -1,0 +1,14 @@
+{
+  "John Doe": {
+    "email": "johndoe@example.com",
+    "salt": "random_salt_value",
+    "password_hash": "hashed_password_value",
+    "tags": ["tag1", "tag2"]
+  },
+  "Bob": {
+    "email": "bob.bobovsky@gmail.com",
+    "salt": "64f59c01545e93ecf91370424b67264ad89b30ad8342c77dbc87f0b43d1cb703",
+    "password_hash": "b988de7a0bffa7014244fa822c386ac757d84f9dd1063225b11fbde300dd912f",
+    "tags": ["tag1"]
+  }
+}
