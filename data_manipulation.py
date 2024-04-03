@@ -66,6 +66,21 @@ class Recipe:
         self.tags = tags
         self.rating = rating
 
+    def to_json(self):
+        return json.dumps({
+            'title': self.title,
+            'link': self.link,
+            'id': self.id,
+            'image': self.image,
+            'tags': self.tags,
+            'rating': self.rating
+        })
+
+    @classmethod
+    def from_json(cls, json_str):
+        data = json.loads(json_str)
+        return cls(data['title'], data['link'], data['id'], data['image'], data['tags'], data['rating'])
+
 
 class FileManipulation:
     def __init__(self, file_path):
