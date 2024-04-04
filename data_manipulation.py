@@ -6,13 +6,13 @@ class User:
     def __init__(self, name, email, password, tags=None):
         self.name = name
         self.email = email
-        self._password = password
+        self.password = password
         self.tags = tags if tags else []
 
 
     @property
     def name(self):
-        return self.name
+        return self._name
 
     @name.setter
     def name(self, name):
@@ -22,11 +22,11 @@ class User:
             raise ValueError("Username must be at least 3 characters long")
         if len(name) > 10:
             raise ValueError("Username must be less than 10 characters long")
-        self.name= name
+        self._name= name
 
     @property
     def email(self):
-        return self.email
+        return self._email
 
     @email.setter
     def email(self, email):
@@ -40,8 +40,8 @@ class User:
 
     @password.setter
     def password(self, password):
-        if not re.match(r"^(?=.*[0-9A-Za-z]).{4,15}$", password):
-            raise ValueError("Password must be between 4 and 15 characters long and contain at least 1 number or special character")
+        if not re.match(r"^(?=.*[0-9A-Za-z]).{4,52}$", password):
+            raise ValueError("Password must be at least 4 characters long and contain at least 1 number or special character")
         self._password = password
 
 
@@ -50,8 +50,7 @@ class User:
 
 
     def verify_password(self, password):
-        key = hashlib.sha256(password.encode()).hexdigest()
-        return self._password == key
+        return self._password == self.hash_password(password)
 
 
     def to_json(self):
@@ -139,7 +138,7 @@ def main():
     data_manipulation = DataManipulation("data/users.json")
     #user = file_manipulation.get_user_object("Dan")
     #print(user.verify_password("prettylittlewords"))
-    user = User("Big Joe", "big.joe@gmail.com", "bigjoe")
+    user = User("AD", "ad.com", "ad")
     data_manipulation.add_object(user)
 
 
