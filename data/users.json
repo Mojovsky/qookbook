@@ -1,20 +1,25 @@
 {
-  "John Doe": {
-    "email": "johndoe@example.com",
-    "salt": "random_salt_value",
-    "password_hash": "hashed_password_value",
-    "tags": ["tag1", "tag2"]
-  },
-  "Bob": {
-    "email": "bob.bobovsky@gmail.com",
-    "salt": "64f59c01545e93ecf91370424b67264ad89b30ad8342c77dbc87f0b43d1cb703",
-    "password_hash": "b988de7a0bffa7014244fa822c386ac757d84f9dd1063225b11fbde300dd912f",
-    "tags": ["tag1", "tag2"]
-  },
-  "Dan Derewonko": {
-    "email": "danderewonko@gmail.com",
-    "salt": "f89bef4a6a3b8ba2f24049edad8640a9b2c1fa001e1bfb7c687c5cfd6bba6a3c",
-    "password_hash": "d2418bbaaa499cb7f5294712fb04d7236bfa17a093f03dc09a9145e756b85c0d",
-    "tags": []
-  }
+    "John Doe": {
+        "email": "johndoe@example.com",
+        "salt": "random_salt_value",
+        "password_hash": "hashed_password_value",
+        "tags": [
+            "tag1",
+            "tag2"
+        ]
+    },
+    "Bob": {
+        "email": "bob.bobovsky@gmail.com",
+        "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+        "tags": []
+    },
+    "Dan": {
+        "email": "danj@gmail.com",
+        "password": "56bb35da67838ceb10c106cc3b2eedf65787f9a212b6da1a3ae7953ebe8753e7",
+        "tags": [
+            "vegan",
+            "vegetarian",
+            "gluten-free"
+        ]
+    }
 }
