@@ -4,13 +4,16 @@ import binascii
 import json
 
 class User:
-    def __init__(self, name, email, password, tags=None):
+    def __init__(self, name, email, password, tags=None, salt=None, password_hash=None):
         self.name = name
         self.email = email
-        self._salt = os.urandom(32)  # Store the salt
-        self._password_hash = self._hash_password(password)
-        self.tags = tags if tags is not None else [] # Store the tags associated with the user
-
+        self.tags = tags if tags else []
+        if salt is None or password_hash is None:
+            self.encrypt_password(password)
+        else:
+            self._salt = salt
+            self._password_hash = password_hash
+        
 
     @property
     def salt(self):
@@ -32,9 +35,10 @@ class User:
         raise AttributeError('password_hash: Not writable.')
 
 
-    def _hash_password(self, password):
+    def encrypt_password(self, password):
+        self._salt = os.urandom(32)  # Generate a new salt
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self._salt, 100000)
-        return binascii.hexlify(key).decode()  # Store the hashed password as hexadecimal string
+        self._password_hash = binascii.hexlify(key).decode()  # Store the hashed password as hexadecimal string
 
 
     def verify_password(self, password):
@@ -60,7 +64,11 @@ class User:
 
     @classmethod
     def from_json(cls, name, data):
-        return name, data['email'], binascii.unhexlify(data['salt']), data['password_hash'], data['tags']
+        salt = binascii.unhexlify(data['salt'])
+        password_hash = data['password_hash']
+        email = data['email']
+        tags = data['tags']
+        return cls(name, email, salt, password_hash, tags)
         
 
 
@@ -119,8 +127,8 @@ class FileManipulation:
 
     def get_user(self, name):
         user_data = self.data[name]
-        user = User.from_json(name, user_data)
-        return user
+        user_object = User.from_json(name, user_data)
+        return user_object
 
 def main():
     file_manipulation = FileManipulation("data/users.json")
