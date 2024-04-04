@@ -4,54 +4,27 @@ import binascii
 import json
 
 class User:
-    def __init__(self, name, email, password, salt=None, password_hash=None, tags=None):
+    def __init__(self, name, email, password, tags=None):
         self.name = name
         self.email = email
-        if salt is None or password_hash is None:
-            self.encrypt_password(password)
-        else:
-            self._salt = salt
-            self._password_hash = password_hash
+        self.password = password
         self.tags = tags if tags else []
-        
-
-    @property
-    def salt(self):
-        return self._salt
 
 
-    @salt.setter
-    def salt(self, value):
-        raise AttributeError('salt: Not writable.')
-
-
-    @property
-    def password_hash(self):
-        return self._password_hash
-
-
-    @password_hash.setter
-    def password_hash(self, value):
-        raise AttributeError('password_hash: Not writable.')
-
-
-    def encrypt_password(self, password):
-        self._salt = os.urandom(32)
-        key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self._salt, 100000)
-        self._password_hash = binascii.hexlify(key).decode()
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
 
 
     def verify_password(self, password):
-        key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self._salt, 100000)
-        return self._password_hash == binascii.hexlify(key).decode()
+        key = hashlib.sha256(password.encode()).hexdigest()
+        return self.password == key
 
 
     def to_json(self):
         return {
             self.name: {
                 'email': self.email,
-                'salt': binascii.hexlify(self._salt).decode(),
-                'password_hash': self._password_hash,
+                'password': self.hash_password(self.password),
                 'tags': self.tags
             }
         }
@@ -60,10 +33,9 @@ class User:
     @classmethod
     def from_json(cls, name, data):
         email = data['email']
-        salt = binascii.unhexlify(data['salt'])
-        password_hash = data['password_hash']
+        password = data['password']
         tags = data['tags']
-        return cls(name, email, salt, password_hash, tags)
+        return cls(name, email, password, tags)
         
 
 
@@ -122,16 +94,16 @@ class FileManipulation:
 
     def get_user_object(self, name):
         user_data = self.data[name]
-        user_object = User.from_json(name, user_data)
-        return user_object
+        return User.from_json(name, user_data)
+
 
 
 
 
 def main():
     file_manipulation = FileManipulation("data/users.json")
-    user = file_manipulation.get_user_object("Bob")
-    print(user.verify_password("mellon"))
+    user = file_manipulation.get_user_object("Dan")
+    print(user.verify_password("prettylittlewords"))
 
 
 if __name__ == "__main__":
