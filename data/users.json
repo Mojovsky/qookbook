@@ -21,5 +21,10 @@
             "vegetarian",
             "gluten-free"
         ]
+    },
+    "Big Joe": {
+        "email": "big.joe@gmail.com",
+        "password": "8e1435d55a9111dea887b9aa6eb741d7d5e317b2ad982fbc6df9f98e45c4ef5e",
+        "tags": []
     }
 }
