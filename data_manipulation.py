@@ -4,20 +4,20 @@ import binascii
 import json
 
 class User:
-    def __init__(self, name, email, password, tags=None, salt=None, password_hash=None):
+    def __init__(self, name, email, password, salt=None, password_hash=None, tags=None):
         self.name = name
         self.email = email
-        self.tags = tags if tags else []
         if salt is None or password_hash is None:
             self.encrypt_password(password)
         else:
             self._salt = salt
             self._password_hash = password_hash
+        self.tags = tags if tags else []
         
 
     @property
     def salt(self):
-        raise AttributeError('salt: Not readable.')
+        return self._salt
 
 
     @salt.setter
@@ -27,7 +27,7 @@ class User:
 
     @property
     def password_hash(self):
-        raise AttributeError('password_hash: Not readable.')
+        return self._password_hash
 
 
     @password_hash.setter
@@ -36,19 +36,14 @@ class User:
 
 
     def encrypt_password(self, password):
-        self._salt = os.urandom(32)  # Generate a new salt
+        self._salt = os.urandom(32)
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self._salt, 100000)
-        self._password_hash = binascii.hexlify(key).decode()  # Store the hashed password as hexadecimal string
+        self._password_hash = binascii.hexlify(key).decode()
 
 
     def verify_password(self, password):
         key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), self._salt, 100000)
-        return self.password_hash == binascii.hexlify(key).decode()
-
-
-    def change_password(self, new_password):
-        self._salt = os.urandom(32)  # Generate a new salt
-        self._password_hash = self._hash_password(new_password)  # Hash the new password
+        return self._password_hash == binascii.hexlify(key).decode()
 
 
     def to_json(self):
@@ -64,9 +59,9 @@ class User:
 
     @classmethod
     def from_json(cls, name, data):
+        email = data['email']
         salt = binascii.unhexlify(data['salt'])
         password_hash = data['password_hash']
-        email = data['email']
         tags = data['tags']
         return cls(name, email, salt, password_hash, tags)
         
@@ -125,20 +120,19 @@ class FileManipulation:
         with open(self.file_path, 'w') as file:
             json.dump(self.data, file, indent=4)
 
-    def get_user(self, name):
+    def get_user_object(self, name):
         user_data = self.data[name]
         user_object = User.from_json(name, user_data)
         return user_object
 
+
+
+
 def main():
     file_manipulation = FileManipulation("data/users.json")
-    user_obj = file_manipulation.get_user("Bob")
-    print(user_obj)
+    user = file_manipulation.get_user_object("Bob")
+    print(user.verify_password("mellon"))
 
 
-main()
-    
-
-
-#file_manipulation = FileManipulation("data/users.json")
-#file_manipulation.add_object(user)
+if __name__ == "__main__":
+    main()
