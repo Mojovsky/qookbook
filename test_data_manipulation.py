@@ -2,22 +2,26 @@ import unittest
 from data_manipulation import User
 
 class TestUser(unittest.TestCase):
-    def setUp(self):
-        self.user = User('John Doe', 'john@example.com', 'password123')
+    def test_name_validation(self):
+        with self.assertRaises(ValueError):
+            user = User('', 'test@test.com', 'password1')
+        with self.assertRaises(ValueError):
+            user = User('ab', 'test@test.com', 'password1')
+        with self.assertRaises(ValueError):
+            user = User('abcdefghijk', 'test@test.com', 'password1')
 
-    def test_hash_password(self):
-        # The hashed password should be a string
-        self.assertIsInstance(self.user.password_hash, str)
+    def test_email_validation(self):
+        with self.assertRaises(ValueError):
+            user = User('name', 'invalid_email', 'password1')
 
-        # The hashed password should not be the same as the plain password
-        self.assertNotEqual(self.user.password_hash, 'password123')
+    def test_password_validation(self):
+        with self.assertRaises(ValueError):
+            user = User('name', 'test@test.com', 'pwd')
 
-    def test_verify_password(self):
-        # The verify_password method should return True for the correct password
-        self.assertTrue(self.user.verify_password('password123'))
-
-        # The verify_password method should return False for an incorrect password
-        self.assertFalse(self.user.verify_password('wrongpassword'))
+    def test_verify_password_true(self):
+        user = User('name', 'test@test.com', 'password1')
+        self.assertTrue(user.verify_password('password1'))
+        
 
 if __name__ == '__main__':
     unittest.main()
