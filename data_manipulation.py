@@ -1,14 +1,48 @@
 import hashlib
-import os
-import binascii
 import json
+import re
 
 class User:
     def __init__(self, name, email, password, tags=None):
         self.name = name
         self.email = email
-        self.password = password
+        self._password = password
         self.tags = tags if tags else []
+
+
+    @property
+    def name(self):
+        return self.name
+
+    @name.setter
+    def name(self, name):
+        if not name:
+            raise ValueError("Username cannot be empty")
+        if len(name) < 3:
+            raise ValueError("Username must be at least 3 characters long")
+        if len(name) > 10:
+            raise ValueError("Username must be less than 10 characters long")
+        self.name= name
+
+    @property
+    def email(self):
+        return self.email
+
+    @email.setter
+    def email(self, email):
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            raise ValueError("Invalid email address")
+        self._email = email
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        if not re.match(r"^(?=.*[0-9A-Za-z]).{4,15}$", password):
+            raise ValueError("Password must be between 4 and 15 characters long and contain at least 1 number or special character")
+        self._password = password
 
 
     def hash_password(self, password):
@@ -17,14 +51,14 @@ class User:
 
     def verify_password(self, password):
         key = hashlib.sha256(password.encode()).hexdigest()
-        return self.password == key
+        return self._password == key
 
 
     def to_json(self):
         return {
             self.name: {
                 'email': self.email,
-                'password': self.hash_password(self.password),
+                'password': self.hash_password(self._password),
                 'tags': self.tags
             }
         }
@@ -67,7 +101,7 @@ class Recipe:
     
 
 
-class FileManipulation:
+class DataManipulation:
     def __init__(self, file_path):
         self.file_path = file_path
         self.data = self.read_file()
@@ -92,6 +126,7 @@ class FileManipulation:
         with open(self.file_path, 'w') as file:
             json.dump(self.data, file, indent=4)
 
+
     def get_user_object(self, name):
         user_data = self.data[name]
         return User.from_json(name, user_data)
@@ -101,9 +136,11 @@ class FileManipulation:
 
 
 def main():
-    file_manipulation = FileManipulation("data/users.json")
-    user = file_manipulation.get_user_object("Dan")
-    print(user.verify_password("prettylittlewords"))
+    data_manipulation = DataManipulation("data/users.json")
+    #user = file_manipulation.get_user_object("Dan")
+    #print(user.verify_password("prettylittlewords"))
+    user = User("Big Joe", "big.joe@gmail.com", "bigjoe")
+    data_manipulation.add_object(user)
 
 
 if __name__ == "__main__":
