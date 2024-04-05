@@ -2,6 +2,15 @@ import hashlib
 import json
 import re
 
+
+def main(): ...
+    #data_manipulation = DataManipulation("data/users.json")
+    #user = data_manipulation.get_user_object("Dan")
+    #print(user.verify_password("prettylittlewords"))
+    #user = User("AD", "ad.com", "ad")
+    #data_manipulation.add_object(user)
+
+
 class User:
     def __init__(self, username, email, password, tags=None):
         self.username = username
@@ -62,34 +71,19 @@ class User:
             }
         }
     
-        
 
 
 class Recipe:
-    def __init__(self, title, link, id, image, tags, rating:None):
+    def __init__(self, title, url, image, tags=None, users=None, rating=None):
         self.title = title
-        self.link = link
-        self.id = id
+        self.url = url
         self.image = image
-        self.tags = tags
-        self.rating = rating
+        self.tags = tags if tags else []
+        self.users = users if users else []
+        self.rating = rating if rating else 0
 
 
-    def to_json(self):
-        return json.dumps({
-            'title': self.title,
-            'link': self.link,
-            'id': self.id,
-            'image': self.image,
-            'tags': self.tags,
-            'rating': self.rating
-        })
 
-
-    @classmethod
-    def from_json(cls, json_str):
-        data = json.loads(json_str)
-        return cls(data['title'], data['link'], data['id'], data['image'], data['tags'], data['rating'])
     
 
 
@@ -123,16 +117,6 @@ class DataManipulation:
         user_data = self.data[username]
         return User(username, **user_data)
 
-
-
-
-
-def main():
-    data_manipulation = DataManipulation("data/users.json")
-    user = data_manipulation.get_user_object("Dan")
-    print(user.verify_password("prettylittlewords"))
-    #user = User("AD", "ad.com", "ad")
-    #data_manipulation.add_object(user)
 
 
 if __name__ == "__main__":
