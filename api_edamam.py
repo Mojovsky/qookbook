@@ -5,19 +5,10 @@ from utils import shorten_url
 
 load_dotenv()
 
-
 class InvalidIngredients(Exception):
-    def __init__(self, message="Invalid ingredients provided"):
+    def __init__(self, message="No match found. Please try again with different ingredients."):
         self.message = message
         super().__init__(self.message)
-
-
-def main():
-    ingridients = ["chicken", "pasta", "brocolli"]
-    url = get_recipe_url(ingridients)
-    data = api_response(url)
-    extracted_recipe_data = extract_recipe_data(data)
-    print(extracted_recipe_data)
 
 
 
@@ -53,8 +44,3 @@ def extract_recipe_data(data):
             }
         )
     return extracted_recipe_data
-
-
-
-if __name__ == "__main__":
-    main()
