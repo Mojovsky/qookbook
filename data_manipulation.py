@@ -3,26 +3,26 @@ import json
 import re
 
 class User:
-    def __init__(self, name, email, password, tags=None):
-        self.name = name
+    def __init__(self, username, email, password, tags=None):
+        self.username = username
         self.email = email
         self.password = password
         self.tags = tags if tags else []
 
 
     @property
-    def name(self):
-        return self._name
+    def username(self):
+        return self._username
 
-    @name.setter
-    def name(self, name):
-        if not name:
+    @username.setter
+    def username(self, username):
+        if not username:
             raise ValueError("Username cannot be empty")
-        if len(name) < 3:
+        if len(username) < 3:
             raise ValueError("Username must be at least 3 characters long")
-        if len(name) > 10:
+        if len(username) > 10:
             raise ValueError("Username must be less than 10 characters long")
-        self._name= name
+        self._username= username
 
     @property
     def email(self):
@@ -40,7 +40,7 @@ class User:
 
     @password.setter
     def password(self, password):
-        if not re.match(r"^(?=.*[0-9A-Za-z]).{4,52}$", password):
+        if not re.match(r"^(?=.*[0-9A-Za-z]).{4,}$", password):
             raise ValueError("Password must be at least 4 characters long and contain at least 1 number or special character")
         self._password = password
 
@@ -55,20 +55,13 @@ class User:
 
     def to_json(self):
         return {
-            self.name: {
+            self.username: {
                 'email': self.email,
                 'password': self.hash_password(self._password),
                 'tags': self.tags
             }
         }
     
-
-    @classmethod
-    def from_json(cls, name, data):
-        email = data['email']
-        password = data['password']
-        tags = data['tags']
-        return cls(name, email, password, tags)
         
 
 
@@ -126,9 +119,9 @@ class DataManipulation:
             json.dump(self.data, file, indent=4)
 
 
-    def get_user_object(self, name):
-        user_data = self.data[name]
-        return User.from_json(name, user_data)
+    def get_user_object(self, username):
+        user_data = self.data[username]
+        return User(username, **user_data)
 
 
 
@@ -136,10 +129,10 @@ class DataManipulation:
 
 def main():
     data_manipulation = DataManipulation("data/users.json")
-    #user = file_manipulation.get_user_object("Dan")
-    #print(user.verify_password("prettylittlewords"))
-    user = User("AD", "ad.com", "ad")
-    data_manipulation.add_object(user)
+    user = data_manipulation.get_user_object("Dan")
+    print(user.verify_password("prettylittlewords"))
+    #user = User("AD", "ad.com", "ad")
+    #data_manipulation.add_object(user)
 
 
 if __name__ == "__main__":
