@@ -1,8 +1,9 @@
 import requests
+import os
+from dotenv import load_dotenv
+from utils import shorten_url
 
-
-app_id = "YOUR_APP_ID"  # Replace with your Edamam app_id
-app_key = "YOUR_APP_KEY"  # Replace with your Edamam app_key
+load_dotenv()
 
 
 class InvalidIngredients(Exception):
@@ -11,8 +12,18 @@ class InvalidIngredients(Exception):
         super().__init__(self.message)
 
 
+def main():
+    ingridients = ["chicken", "pasta", "brocolli"]
+    url = get_recipe_url(ingridients)
+    data = api_response(url)
+    extracted_recipe_data = extract_recipe_data(data)
+    print(extracted_recipe_data)
 
-def get_recipe_url(ingridients, app_id, app_key):
+
+
+def get_recipe_url(ingridients):
+    app_id = os.getenv("app_id")
+    app_key = os.getenv("app_key")
     base_url = "https://api.edamam.com/api/recipes/v2"
     query = "%2C%20".join(ingridients)
     url = f"{base_url}?type=public&q={query}&app_id={app_id}&app_key={app_key}"
@@ -32,11 +43,18 @@ def extract_recipe_data(data):
         raise InvalidIngredients()
     extracted_recipe_data = []
     for recipe in data["hits"]:
+        url = shorten_url(recipe["recipe"]["url"])
+        image_url = shorten_url(recipe["recipe"]["image"])
         extracted_recipe_data.append(
             {
                 "title": recipe["recipe"]["label"],
-                "url": recipe["recipe"]["url"],
-                "image": recipe["recipe"]["image"],
+                "url": url,
+                "image": image_url,
             }
         )
     return extracted_recipe_data
+
+
+
+if __name__ == "__main__":
+    main()
