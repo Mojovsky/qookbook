@@ -83,7 +83,16 @@ class Recipe:
         self.rating = rating if rating else 0
 
 
-
+    def to_json(self):
+        return {
+            self.title: {
+            "url": self.url,
+            "image": self.image,
+            "tags": self.tags,
+            "users": self.users,
+            "rating": self.rating
+            }
+        }
     
 
 
@@ -116,6 +125,22 @@ class DataManipulation:
     def get_user_object(self, username):
         user_data = self.data[username]
         return User(username, **user_data)
+    
+
+    def get_recipe_object(self, title):
+        recipe_data = self.data[title]
+        return Recipe(**recipe_data)
+    
+
+    def get_fav_recipe_list(self, username):
+        fav_list = []
+        for title in self.data:
+            if username in self.data[title]['users']:
+                recipe_data = self.data[title]
+                recipe = self.get_recipe_object(recipe_data)
+                fav_list.append(recipe)
+        return fav_list
+        
 
 
 
