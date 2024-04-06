@@ -1,3 +1,4 @@
+import api_edamam
 import hashlib
 import json
 import re
@@ -140,7 +141,51 @@ class DataManipulation:
                 recipe = self.get_recipe_object(recipe_data)
                 fav_list.append(recipe)
         return fav_list
+
+
+
+class UserInteraction:
+    def __init__(self):
+        self.user_manipulation = DataManipulation("data/users.json")
+        self.recipe_manipulation = DataManipulation("data/recipes.json")
+
+
+
+    def create_user(self, username, email, password):
+        user = User(username, email, password)
+        self.user_manipulation.add_object(user)
+        return user
+    
+
+    def login(self, username, password):
+        user = self.user_manipulation.get_user_object(username)
+        if user.verify_password(password):
+            return user
+        else:
+            return None
         
+    
+    def search_recipes(self, ingridients):
+        url = api_edamam.get_recipe_url(ingridients)
+        data = api_edamam.api_response(url)
+        recipe_data = api_edamam.extract_recipe_data(data)
+        return recipe_data
+
+
+    def add_fav_recipe(self, username, recipe, tags=None):
+        recipe = Recipe(**recipe)
+        recipe.users.append(username)
+        if tags: recipe.tags.extend(tags)
+        self.recipe_manipulation.add_object(recipe)
+
+
+    def add_custom_tags(self, user, recipe, tags):
+        user_obj = self.user_manipulation.get_user_object(user)
+        recipe_obj = self.recipe_manipulation.get_recipe_object(recipe)
+        user_obj.tags.extend(tags)
+        recipe_obj.tags.extend(tags)
+        self.user_manipulation.write_file(user_obj.to_json())
+        self.recipe_manipulation.write_file(recipe_obj.to_json())
 
 
 
