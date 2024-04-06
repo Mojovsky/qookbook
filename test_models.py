@@ -1,5 +1,5 @@
 import unittest
-from data_manipulation import User
+from models import User
 
 class TestUser(unittest.TestCase):
     def test_name_validation(self):
