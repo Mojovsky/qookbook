@@ -4,20 +4,21 @@ import json
 import re
 
 
-def main(): ...
-    #data_manipulation = DataManipulation("data/users.json")
-    #user = data_manipulation.get_user_object("Dan")
-    #print(user.verify_password("prettylittlewords"))
-    #user = User("AD", "ad.com", "ad")
-    #data_manipulation.add_object(user)
+def main():
+    user_interaction = UserInteraction()
+    #data_manipulation = DataManipulation("data/recipes.json")
+    #recipes = user_interaction.search_recipes(["pasta", "bacon", "cheese"])
+    recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Smoky Bacon Mac And Cheese Recipe")
+    user_interaction.recipe_manipulation.add_fav_recipe("Dan", recipe_obj)
+    #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
+    #print(fav_list)
 
 
 class User:
-    def __init__(self, username, email, password, tags=None):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
-        self.tags = tags if tags else []
 
 
     @property
@@ -67,21 +68,18 @@ class User:
         return {
             self.username: {
                 'email': self.email,
-                'password': self.hash_password(self._password),
-                'tags': self.tags
+                'password': self.hash_password(self._password)
             }
         }
     
 
 
 class Recipe:
-    def __init__(self, title, url, image, tags=None, users=None, rating=None):
+    def __init__(self, title, url, image, users=None):
         self.title = title
         self.url = url
         self.image = image
-        self.tags = tags if tags else []
         self.users = users if users else []
-        self.rating = rating if rating else 0
 
 
     def to_json(self):
@@ -89,9 +87,7 @@ class Recipe:
             self.title: {
             "url": self.url,
             "image": self.image,
-            "tags": self.tags,
             "users": self.users,
-            "rating": self.rating
             }
         }
     
@@ -130,16 +126,28 @@ class DataManipulation:
 
     def get_recipe_object(self, title):
         recipe_data = self.data[title]
-        return Recipe(**recipe_data)
+        return Recipe(title, **recipe_data)
     
+
+    def create_temp_recipes(self, recipes):
+        self.file_path = "data/temp_recipes.json"
+        self.data = {}
+        for recipe in recipes:
+            recipe = Recipe(**recipe)
+            self.add_object(recipe)
+
+
+    def add_fav_recipe(self, username, recipe_obj):
+        recipe_obj.users.append(username)
+        self.add_object(recipe_obj)
+
 
     def get_fav_recipe_list(self, username):
         fav_list = []
         for title in self.data:
             if username in self.data[title]['users']:
-                recipe_data = self.data[title]
-                recipe = self.get_recipe_object(recipe_data)
-                fav_list.append(recipe)
+                recipe_obj = self.get_recipe_object(title)
+                fav_list.append(recipe_obj)
         return fav_list
 
 
@@ -148,44 +156,36 @@ class UserInteraction:
     def __init__(self):
         self.user_manipulation = DataManipulation("data/users.json")
         self.recipe_manipulation = DataManipulation("data/recipes.json")
+        self.temp_recipe_manipulation = DataManipulation("data/temp_recipes.json")
 
 
 
     def create_user(self, username, email, password):
+        data = self.user_manipulation.read_file()
+        if username in data:
+            raise ValueError("Username already exists")
         user = User(username, email, password)
         self.user_manipulation.add_object(user)
         return user
-    
+            
 
     def login(self, username, password):
         user = self.user_manipulation.get_user_object(username)
-        if user.verify_password(password):
-            return user
-        else:
-            return None
+        if user is None:
+            raise ValueError("Invalid username")
+        if not user.verify_password(password):
+            raise ValueError("Invalid password")
+        return user
         
     
     def search_recipes(self, ingridients):
         url = api_edamam.get_recipe_url(ingridients)
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
+        self.recipe_manipulation.create_temp_recipes(recipe_data)
         return recipe_data
 
 
-    def add_fav_recipe(self, username, recipe, tags=None):
-        recipe = Recipe(**recipe)
-        recipe.users.append(username)
-        if tags: recipe.tags.extend(tags)
-        self.recipe_manipulation.add_object(recipe)
-
-
-    def add_custom_tags(self, user, recipe, tags):
-        user_obj = self.user_manipulation.get_user_object(user)
-        recipe_obj = self.recipe_manipulation.get_recipe_object(recipe)
-        user_obj.tags.extend(tags)
-        recipe_obj.tags.extend(tags)
-        self.user_manipulation.write_file(user_obj.to_json())
-        self.recipe_manipulation.write_file(recipe_obj.to_json())
 
 
 

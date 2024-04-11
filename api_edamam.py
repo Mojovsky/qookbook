@@ -34,13 +34,11 @@ def extract_recipe_data(data):
         raise InvalidIngredients()
     extracted_recipe_data = []
     for recipe in data["hits"]:
-        url = shorten_url(recipe["recipe"]["url"])
-        image_url = shorten_url(recipe["recipe"]["image"])
         extracted_recipe_data.append(
             {
                 "title": recipe["recipe"]["label"],
-                "url": url,
-                "image": image_url,
+                "url": recipe["recipe"]["url"],
+                "image": recipe["recipe"]["image"],
             }
         )
     return extracted_recipe_data
