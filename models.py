@@ -7,11 +7,11 @@ import re
 def main():
     user_interaction = UserInteraction()
     #data_manipulation = DataManipulation("data/recipes.json")
-    #recipes = user_interaction.search_recipes(["lettuce", "bacon", "tomato"])
-    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Bacon Taquitos Recipe")
-    #user_interaction.add_fav_recipe("Dan", recipe_obj)
-    fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
-    print(fav_list)
+    #recipes = user_interaction.search_recipes(["pasta", "bacon", "cheese"])
+    recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Smoky Bacon Mac And Cheese Recipe")
+    user_interaction.recipe_manipulation.add_fav_recipe("Dan", recipe_obj)
+    #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
+    #print(fav_list)
 
 
 class User:
@@ -137,6 +137,11 @@ class DataManipulation:
             self.add_object(recipe)
 
 
+    def add_fav_recipe(self, username, recipe_obj):
+        recipe_obj.users.append(username)
+        self.add_object(recipe_obj)
+
+
     def get_fav_recipe_list(self, username):
         fav_list = []
         for title in self.data:
@@ -179,11 +184,7 @@ class UserInteraction:
         recipe_data = api_edamam.extract_recipe_data(data)
         self.recipe_manipulation.create_temp_recipes(recipe_data)
         return recipe_data
-    
 
-    def add_fav_recipe(self, username, recipe_obj):
-        recipe_obj.users.append(username)
-        self.recipe_manipulation.add_object(recipe_obj)
 
 
 
