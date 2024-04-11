@@ -154,23 +154,28 @@ class UserInteraction:
 
 
     def create_user(self, username, email, password):
+        data = self.user_manipulation.read_file()
+        if username in data:
+            raise ValueError("Username already exists")
         user = User(username, email, password)
         self.user_manipulation.add_object(user)
         return user
-    
+            
 
     def login(self, username, password):
         user = self.user_manipulation.get_user_object(username)
-        if user.verify_password(password):
-            return user
-        else:
-            return None
+        if user is None:
+            raise ValueError("Invalid username")
+        if not user.verify_password(password):
+            raise ValueError("Invalid password")
+        return user
         
     
     def search_recipes(self, ingridients):
         url = api_edamam.get_recipe_url(ingridients)
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
+        self.recipe_manipulation.create_temp_recipes(recipe_data)
         return recipe_data
     
 
