@@ -6,10 +6,12 @@ import re
 
 def main():
     user_interaction = UserInteraction()
-    data_manipulation = DataManipulation("data/recipes.json")
-    recipes = user_interaction.search_recipes(["lettuce", "bacon", "tomato"])
-    data_manipulation.create_temp_recipes(recipes)
-
+    #data_manipulation = DataManipulation("data/recipes.json")
+    #recipes = user_interaction.search_recipes(["lettuce", "bacon", "tomato"])
+    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Bacon Taquitos Recipe")
+    #user_interaction.add_fav_recipe("Dan", recipe_obj)
+    fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
+    print(fav_list)
 
 
 class User:
@@ -124,7 +126,7 @@ class DataManipulation:
 
     def get_recipe_object(self, title):
         recipe_data = self.data[title]
-        return Recipe(**recipe_data)
+        return Recipe(title, **recipe_data)
     
 
     def create_temp_recipes(self, recipes):
@@ -139,8 +141,8 @@ class DataManipulation:
         fav_list = []
         for title in self.data:
             if username in self.data[title]['users']:
-                recipe_data = self.data[title]
-                fav_list.append(recipe_data)
+                recipe_obj = self.get_recipe_object(title)
+                fav_list.append(recipe_obj)
         return fav_list
 
 
@@ -179,10 +181,9 @@ class UserInteraction:
         return recipe_data
     
 
-    def add_fav_recipe(self, username, recipe):
-        recipe = Recipe(**recipe)
-        recipe.users.append(username)
-        self.recipe_manipulation.add_object(recipe)
+    def add_fav_recipe(self, username, recipe_obj):
+        recipe_obj.users.append(username)
+        self.recipe_manipulation.add_object(recipe_obj)
 
 
 
