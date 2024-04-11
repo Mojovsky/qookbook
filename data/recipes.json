@@ -1,1 +1,23 @@
-{}
+{
+    "Bacon, Lettuce, and Tomato Salad": {
+        "url": "https://tinyurl.com/2yzzpyva",
+        "image": "https://tinyurl.com/24wozlra",
+        "users": [
+            "Dan"
+        ]
+    },
+    "BLT (Bacon Lettuce And Tomato) Sandwich": {
+        "url": "https://tinyurl.com/2dq46hw6",
+        "image": "https://tinyurl.com/22coanwy",
+        "users": [
+            "Dan"
+        ]
+    },
+    "Bacon Taquitos Recipe": {
+        "url": "https://tinyurl.com/2yysxtxd",
+        "image": "https://tinyurl.com/277twrs6",
+        "users": [
+            "Dan"
+        ]
+    }
+}
