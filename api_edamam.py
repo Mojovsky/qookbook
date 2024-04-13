@@ -1,7 +1,6 @@
 import requests
 import os
 from dotenv import load_dotenv
-from utils import shorten_url
 
 load_dotenv()
 
@@ -38,7 +37,7 @@ def extract_recipe_data(data):
             {
                 "title": recipe["recipe"]["label"],
                 "url": recipe["recipe"]["url"],
-                "image": recipe["recipe"]["image"],
+                "image": recipe["recipe"]["images"]["THUMBNAIL"]["url"],
             }
         )
     return extracted_recipe_data
