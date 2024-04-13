@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QookBook</title>
+  </head>
+  <body>
+    <h1>Hello, {{ user.username }}</h1>
+    <h3>Here are your recipes:</h3>
+    {% for recipe in recipes %}
+    <div class="content_box" id="fav_recipes">
+      <img src="{{ recipe.image }}" alt="{{ recipe.title }}" />
+      <p>{{ recipe.title }}</p>
+      <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+    </div>
+    {% endfor %}
+  </body>
+</html>
