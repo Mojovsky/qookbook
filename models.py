@@ -6,10 +6,11 @@ import re
 
 def main():
     user_interaction = UserInteraction()
+    #user_interaction.create_user("test", "test@gmail.com", "test")
     #data_manipulation = DataManipulation("data/recipes.json")
-    #recipes = user_interaction.search_recipes(["pasta", "bacon", "cheese"])
-    recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Smoky Bacon Mac And Cheese Recipe")
-    user_interaction.recipe_manipulation.add_fav_recipe("Dan", recipe_obj)
+    #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
+    recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Mushroom Ragout with Pasta")
+    user_interaction.recipe_manipulation.add_fav_recipe("test", recipe_obj)
     #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
     #print(fav_list)
 
@@ -138,11 +139,13 @@ class DataManipulation:
 
 
     def add_fav_recipe(self, username, recipe_obj):
+        self.file_path = "data/recipes.json"
         recipe_obj.users.append(username)
         self.add_object(recipe_obj)
 
 
     def get_fav_recipe_list(self, username):
+        self.file_path = "data/recipes.json"
         fav_list = []
         for title in self.data:
             if username in self.data[title]['users']:
@@ -163,7 +166,7 @@ class UserInteraction:
     def create_user(self, username, email, password):
         data = self.user_manipulation.read_file()
         if username in data:
-            raise ValueError("Username already exists")
+            raise ValueError("Username already taken")
         user = User(username, email, password)
         self.user_manipulation.add_object(user)
         return user
@@ -175,14 +178,15 @@ class UserInteraction:
             raise ValueError("Invalid username")
         if not user.verify_password(password):
             raise ValueError("Invalid password")
-        return user
+        fav_recipes = self.recipe_manipulation.get_fav_recipe_list(username)
+        return user, fav_recipes
         
     
     def search_recipes(self, ingridients):
         url = api_edamam.get_recipe_url(ingridients)
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
-        self.recipe_manipulation.create_temp_recipes(recipe_data)
+        self.temp_recipe_manipulation.create_temp_recipes(recipe_data)
         return recipe_data
 
 
