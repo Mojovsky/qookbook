@@ -13,7 +13,7 @@ def main():
     #print(user.id)
     #data_manipulation = DataManipulation("data/recipes.json")
     #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
-    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Pasta With Tomato-Mushroom Sauce")
+    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Pasta Primavera")
     #user_interaction.recipe_manipulation.add_fav_recipe(user.id, recipe_obj)
     #fav_list = user_interaction.get_fav_recipes(user.id)
     #print(fav_list)
@@ -87,10 +87,9 @@ class User:
 
 
 class Recipe:
-    def __init__(self, title, url, image, users=None):
+    def __init__(self, title, url, users=None):
         self.title = title
         self.url = url
-        self.image = image
         self.users = users if users else []
 
 
@@ -98,7 +97,6 @@ class Recipe:
         return {
             self.title: {
             "url": self.url,
-            "image": self.image,
             "users": self.users,
             }
         }

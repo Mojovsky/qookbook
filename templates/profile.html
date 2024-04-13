@@ -3,7 +3,6 @@
 <h3>Here are your recipes:</h3>
 {% for recipe in recipes %}
 <div class="content_box" id="fav_recipes">
-  <img src="{{ recipe.image }}" alt="{{ recipe.title }}" />
   <p>{{ recipe.title }}</p>
   <a href="{{ recipe.url }}">{{ recipe.url }}</a>
 </div>
