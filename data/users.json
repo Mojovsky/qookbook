@@ -1,19 +1,23 @@
 {
-  "John Doe": {
-    "email": "johndoe@example.com",
-    "salt": "random_salt_value",
-    "password_hash": "hashed_password_value"
-  },
-  "Bob": {
-    "email": "bob.bobovsky@gmail.com",
-    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
-  },
-  "Dan": {
-    "email": "danj@gmail.com",
-    "password": "56bb35da67838ceb10c106cc3b2eedf65787f9a212b6da1a3ae7953ebe8753e7"
-  },
-  "Big Joe": {
-    "email": "big.joe@gmail.com",
-    "password": "8e1435d55a9111dea887b9aa6eb741d7d5e317b2ad982fbc6df9f98e45c4ef5e"
-  }
+    "John Doe": {
+        "email": "johndoe@example.com",
+        "salt": "random_salt_value",
+        "password_hash": "hashed_password_value"
+    },
+    "Bob": {
+        "email": "bob.bobovsky@gmail.com",
+        "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+    },
+    "Dan": {
+        "email": "danj@gmail.com",
+        "password": "56bb35da67838ceb10c106cc3b2eedf65787f9a212b6da1a3ae7953ebe8753e7"
+    },
+    "Big Joe": {
+        "email": "big.joe@gmail.com",
+        "password": "8e1435d55a9111dea887b9aa6eb741d7d5e317b2ad982fbc6df9f98e45c4ef5e"
+    },
+    "test": {
+        "email": "test@gmail.com",
+        "password": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    }
 }
