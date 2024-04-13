@@ -1,24 +1,28 @@
 import api_edamam
 import hashlib
 import json
+import uuid
 import re
 
 
 def main():
     user_interaction = UserInteraction()
+    #user_interaction.create_user("test2", "test2")
     #user_interaction.create_user("test", "test@gmail.com", "test")
+    #user = user_interaction.login("test", "test")[0]
+    #print(user.id)
     #data_manipulation = DataManipulation("data/recipes.json")
     #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
-    recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Mushroom Ragout with Pasta")
-    user_interaction.recipe_manipulation.add_fav_recipe("test", recipe_obj)
-    #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list("Dan")
+    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Pasta With Tomato-Mushroom Sauce")
+    #user_interaction.recipe_manipulation.add_fav_recipe(user.id, recipe_obj)
+    #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list(user.id)
     #print(fav_list)
 
 
 class User:
-    def __init__(self, username, email, password):
+    def __init__(self, id, username, password):
         self.username = username
-        self.email = email
+        self.id = id
         self.password = password
 
 
@@ -36,15 +40,6 @@ class User:
             raise ValueError("Username must be less than 10 characters long")
         self._username= username
 
-    @property
-    def email(self):
-        return self._email
-
-    @email.setter
-    def email(self, email):
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            raise ValueError("Invalid email address")
-        self._email = email
 
     @property
     def password(self):
@@ -67,8 +62,8 @@ class User:
 
     def to_json(self):
         return {
-            self.username: {
-                'email': self.email,
+            self.id: {
+                'username': self.username,
                 'password': self.hash_password(self._password)
             }
         }
@@ -120,9 +115,9 @@ class DataManipulation:
             json.dump(self.data, file, indent=4)
 
 
-    def get_user_object(self, username):
-        user_data = self.data[username]
-        return User(username, **user_data)
+    def get_user_object(self, id):
+        user_data = self.data[id]
+        return User(id, **user_data)
     
 
     def get_recipe_object(self, title):
@@ -138,17 +133,17 @@ class DataManipulation:
             self.add_object(recipe)
 
 
-    def add_fav_recipe(self, username, recipe_obj):
+    def add_fav_recipe(self, id, recipe_obj):
         self.file_path = "data/recipes.json"
-        recipe_obj.users.append(username)
+        recipe_obj.users.append(id)
         self.add_object(recipe_obj)
 
 
-    def get_fav_recipe_list(self, username):
+    def get_fav_recipe_list(self, id):
         self.file_path = "data/recipes.json"
         fav_list = []
         for title in self.data:
-            if username in self.data[title]['users']:
+            if id in self.data[title]['users']:
                 recipe_obj = self.get_recipe_object(title)
                 fav_list.append(recipe_obj)
         return fav_list
@@ -163,18 +158,24 @@ class UserInteraction:
 
 
 
-    def create_user(self, username, email, password):
+    def create_user(self, username, password):
         data = self.user_manipulation.read_file()
         if username in data:
             raise ValueError("Username already taken")
-        user = User(username, email, password)
+        id = str(uuid.uuid4())
+        user = User(id, username, password)
         self.user_manipulation.add_object(user)
         return user
             
 
     def login(self, username, password):
-        user = self.user_manipulation.get_user_object(username)
-        if user is None:
+        data = self.user_manipulation.read_file()
+        user = None
+        for id, user_data in data.items():
+            if username == user_data["username"]:
+                user = self.user_manipulation.get_user_object(id)
+                break
+        if not user:
             raise ValueError("Invalid username")
         if not user.verify_password(password):
             raise ValueError("Invalid password")
