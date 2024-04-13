@@ -9,13 +9,13 @@ def main():
     user_interaction = UserInteraction()
     #user_interaction.create_user("test2", "test2")
     #user_interaction.create_user("test", "test@gmail.com", "test")
-    #user = user_interaction.login("test", "test")[0]
+    #user = user_interaction.login("test", "test")
     #print(user.id)
     #data_manipulation = DataManipulation("data/recipes.json")
     #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
     #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Pasta With Tomato-Mushroom Sauce")
     #user_interaction.recipe_manipulation.add_fav_recipe(user.id, recipe_obj)
-    #fav_list = user_interaction.recipe_manipulation.get_fav_recipe_list(user.id)
+    #fav_list = user_interaction.get_fav_recipes(user.id)
     #print(fav_list)
 
 
@@ -139,16 +139,6 @@ class DataManipulation:
         self.add_object(recipe_obj)
 
 
-    def get_fav_recipe_list(self, id):
-        self.file_path = "data/recipes.json"
-        fav_list = []
-        for title in self.data:
-            if id in self.data[title]['users']:
-                recipe_obj = self.get_recipe_object(title)
-                fav_list.append(recipe_obj)
-        return fav_list
-
-
 
 class UserInteraction:
     def __init__(self):
@@ -179,8 +169,17 @@ class UserInteraction:
             raise ValueError("Invalid username")
         if not user.verify_password(password):
             raise ValueError("Invalid password")
-        fav_recipes = self.recipe_manipulation.get_fav_recipe_list(username)
-        return user, fav_recipes
+        return user
+    
+
+    def get_fav_recipes(self, id):
+        data = self.recipe_manipulation.read_file()
+        fav_list = []
+        for title in data:
+            if id in data[title]['users']:
+                recipe_obj = self.recipe_manipulation.get_recipe_object(title)
+                fav_list.append(recipe_obj)
+        return fav_list
         
     
     def search_recipes(self, ingridients):
