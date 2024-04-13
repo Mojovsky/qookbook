@@ -6,13 +6,18 @@
     <title>QookBook</title>
   </head>
   <body>
-    <div>
+    <nav>
       Qookbook
       <a href="/index">Home</a>
-      <a href="/profile">Profile</a>
-      <a href="/search">Search</a>
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('profile') }}">Profile</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('createprofile') }}">Sign-Up</a>
+      {% endif %}
       <hr />
       {% block content %}{% endblock %}
-    </div>
+    </nav>
   </body>
 </html>
