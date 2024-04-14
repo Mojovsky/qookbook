@@ -15,7 +15,10 @@ def get_recipe_url(ingridients):
     app_id = os.getenv("app_id")
     app_key = os.getenv("app_key")
     base_url = "https://api.edamam.com/api/recipes/v2"
-    query = "%2C%20".join(ingridients)
+    if isinstance(ingridients, (list, tuple)):
+        query = "%2C%20".join(ingridients)
+    else:
+        query = ingridients
     url = f"{base_url}?type=public&q={query}&app_id={app_id}&app_key={app_key}"
     return url
 
