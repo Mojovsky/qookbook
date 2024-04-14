@@ -1,1 +1,28 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+<h1>Search</h1>
+<form action="/search" method="POST">
+  <label for="search">Search:</label>
+  <input type="text" id="search" name="search" required />
+  <input type="submit" value="Search" />
+</form>
+{% for recipe in recipes %}
+<div class="content_box" id="search_recipes">
+  <div>
+    <p>{{ recipe.title }}</p>
+    <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+    <input type="hidden" name="recipe_title" value="{{ recipe.title }}" />
+    <input type="submit" value="Add to Favorites" />
+  </div>
+</div>
+{% endfor %}
+<h3>Last Search</h3>
+{% for recipe_title, recipe_data in last_search.items() %}
+<div class="content_box" id="last_search">
+  <div>
+    <p>{{ recipe_title }}</p>
+    <a href="{{ recipe_data['url'] }}">{{ recipe_data['url'] }}</a>
+    <input type="hidden" name="recipe_title" value="{{ recipe_title }}" />
+    <input type="submit" value="Add to Favorites" />
+  </div>
+</div>
+{% endfor %} {% endblock %}
