@@ -12,11 +12,13 @@ login_manager.init_app(app)
 @app.route('/')
 @app.route('/index')
 def index():
+    """The index route is the home page of the application. It renders the index.html template."""
     return render_template('index.html', title='Home')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    """The signup route is used to create a new user account. It renders the signup.html template."""
     user_interaction = UserInteraction()
     if request.method == 'POST':
         username = request.form['username']
@@ -38,12 +40,14 @@ def signup():
 
 @login_manager.user_loader
 def load_user(user_id):
+    """This function is used to load a user object from the user_id provided by the login manager."""
     user_interaction = UserInteraction()
     return user_interaction.user_manipulation.get_user_object(user_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """The login route is used to authenticate a user. It renders the login.html template."""
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -61,6 +65,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """The logout route is used to log out a user. It redirects to the index route after logging out."""
     logout_user()
     return redirect(url_for('index'))
 
@@ -68,6 +73,7 @@ def logout():
 @app.route('/profile')
 @login_required
 def profile():
+    """The profile route is used to display the user's profile page. It renders the profile.html template."""
     user = current_user
     user_interaction = UserInteraction()
     recipes = user_interaction.get_fav_recipes(user.id)
@@ -76,18 +82,24 @@ def profile():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+    """The search route is used to search for recipes based on ingredients. It renders the search.html template."""
     if request.method == 'POST':
-        user_interaction = UserInteraction()
-        ingredients = request.form['search']
-        recipes = user_interaction.search_recipes(ingredients)
-        session['recipes'] = [recipe for recipe in recipes]
-        return render_template('search.html', title='Search', recipes=recipes)
+        try:
+            user_interaction = UserInteraction()
+            ingredients = request.form['search']
+            recipes = user_interaction.search_recipes(ingredients)
+            session['recipes'] = [recipe for recipe in recipes]
+            return render_template('search.html', title='Search', recipes=recipes)
+        except Exception as e:
+            flash(f"{e}")
+            return render_template('search.html', title='Search')
     return render_template('search.html', title='Search')
 
 
 @app.route('/add_to_favorites', methods=['POST'])
 @login_required
 def add_to_favorites():
+    """The add_to_favorites route is used to add a recipe to the user's favorites. It redirects to the search route after adding the recipe."""
     recipe_title = request.form['recipe_title']
     recipes = session.get('recipes')
     recipe = next((recipe for recipe in recipes if recipe['title'] == recipe_title), None)

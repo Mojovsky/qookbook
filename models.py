@@ -7,6 +7,7 @@ import re
 
 
 class User:
+    """User class for creating user objects"""
     def __init__(self, id, username, password):
         self.username = username
         self.id = id
@@ -56,14 +57,17 @@ class User:
 
 
     def hash_password(self, password):
+        """Hashes the password using sha256 algorithm"""
         return hashlib.sha256(password.encode()).hexdigest()
 
 
     def verify_password(self, password):
+        """Verifies the password by comparing the hashed password with the provided password"""
         return self._password == self.hash_password(password)
 
 
     def to_json(self):
+        """Converts user object to json format"""
         return {
             self.id: {
                 'username': self.username,
@@ -74,6 +78,7 @@ class User:
 
 
 class Recipe:
+    """Recipe class for creating recipe objects"""
     def __init__(self, id, title, url, users=None):
         self.id = id
         self.title = title
@@ -82,6 +87,7 @@ class Recipe:
 
 
     def to_json(self):
+        """Converts recipe object to json format"""
         return {
             self.id: {
             "title": self.title,
@@ -93,6 +99,7 @@ class Recipe:
 
 
 class DataManipulation:
+    """Class for reading and writing data to json files"""
     def __init__(self, file_path):
         self.file_path = file_path
         self.data = self.read_file()
@@ -130,6 +137,7 @@ class DataManipulation:
 
 
 class UserInteraction:
+    """Class for user interaction with the application"""
     def __init__(self):
         self.user_manipulation = DataManipulation("data/users.json")
         self.recipe_manipulation = DataManipulation("data/recipes.json")
@@ -137,6 +145,7 @@ class UserInteraction:
 
 
     def create_user(self, username, password):
+        """Creates a new user object and adds it to the users.json file"""
         data = self.user_manipulation.read_file()
         for id, user_data in data.items():
             if username == user_data["username"]:
@@ -148,6 +157,7 @@ class UserInteraction:
             
 
     def login(self, username, password):
+        """Logs in a user by verifying the username and password"""
         data = self.user_manipulation.read_file()
         user = None
         for id, user_data in data.items():
@@ -162,6 +172,7 @@ class UserInteraction:
     
 
     def add_fav_recipe(self, user_id, title, url):
+        """Adds a recipe to a user's favorite list"""
         data = self.recipe_manipulation.read_file()
         for recipe_id, recipe_data in data.items():
             if recipe_data['title'] == title:
@@ -176,6 +187,7 @@ class UserInteraction:
 
 
     def get_fav_recipes(self, user_id):
+        """Retrieves user's favorite recipes"""
         data = self.recipe_manipulation.read_file()
         fav_list = []
         for recipe in data:
@@ -186,6 +198,7 @@ class UserInteraction:
         
     
     def search_recipes(self, ingridients):
+        """Searches for recipes based on the ingridients provided by the user"""
         url = api_edamam.get_recipe_url(ingridients)
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
