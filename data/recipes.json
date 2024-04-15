@@ -42,5 +42,19 @@
         "users": [
             "00946c61-c406-4180-8c15-8f5864bb276e"
         ]
+    },
+    "864cd79a-2005-43b2-93ca-648b70b3b522": {
+        "title": "Avocado Egg Salad",
+        "url": "https://honestcooking.com/avocado-egg-salad-recipe/",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    },
+    "618e99d3-8316-4e20-8b6d-4ea4b359e35e": {
+        "title": "Avocado Egg Rolls",
+        "url": "https://food52.com/recipes/52891-avocado-egg-rolls",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
     }
 }
