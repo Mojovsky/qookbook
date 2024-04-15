@@ -1,14 +1,26 @@
 {
-  "Pasta With Tomato-Mushroom Sauce": {
-    "url": "https://www.realsimple.com/food-recipes/browse-all-recipes/pasta-tomato-mushroom-sauce",
-    "users": ["7bcf3b4e-4493-4bca-897e-baf03298ddc3"]
-  },
-  "Alpine Mushroom Pasta": {
-    "url": "http://www.eatingwell.com/recipes/alpine_mushroom_pasta.html",
-    "users": ["7bcf3b4e-4493-4bca-897e-baf03298ddc3"]
-  },
-  "Pasta Primavera": {
-    "url": "https://food52.com/recipes/80596-pasta-primavera",
-    "users": ["7bcf3b4e-4493-4bca-897e-baf03298ddc3"]
-  }
+    "Pasta With Tomato-Mushroom Sauce": {
+        "url": "https://www.realsimple.com/food-recipes/browse-all-recipes/pasta-tomato-mushroom-sauce",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    },
+    "Alpine Mushroom Pasta": {
+        "url": "http://www.eatingwell.com/recipes/alpine_mushroom_pasta.html",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    },
+    "Pasta Primavera": {
+        "url": "https://food52.com/recipes/80596-pasta-primavera",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    },
+    "Cook the Book: Canned Tuna": {
+        "url": "http://www.seriouseats.com/recipes/2009/05/canned-tuna-recipe.html",
+        "users": [
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    }
 }
