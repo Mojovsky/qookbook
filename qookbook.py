@@ -69,24 +69,26 @@ def profile():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     user_interaction = UserInteraction()
-    last_search = user_interaction.temp_recipe_manipulation.read_file()
     if request.method == 'POST':
-        ingridients = request.form['search']
-        recipes = user_interaction.search_recipes(ingridients)
-        session['recipes'] = recipes
-        return render_template('search.html', title='Search', recipes=recipes, last_search=last_search)
-    return render_template('search.html', title='Search', last_search=last_search)
+        ingredients = request.form['search']
+        recipes = user_interaction.search_recipes(ingredients)
+        session['recipes'] = [recipe for recipe in recipes]
+        return render_template('search.html', title='Search', recipes=recipes)
+    return render_template('search.html', title='Search')
 
 
 @app.route('/add_to_favorites', methods=['POST'])
 @login_required
 def add_to_favorites():
-    user_interaction = UserInteraction()
     recipe_title = request.form['recipe_title']
-    recipe = user_interaction.temp_recipe_manipulation.get_recipe_object(recipe_title)
-    user_interaction.recipe_manipulation.add_fav_recipe(current_user.id, recipe)
-    flash('Recipe successfully added to favorites!')
     recipes = session.get('recipes')
+    recipe = next((recipe for recipe in recipes if recipe['title'] == recipe_title), None)
+    if recipe:
+        user_interaction = UserInteraction()
+        user_interaction.add_fav_recipe(current_user.id, **recipe)
+        flash('Recipe successfully added to favorites!')
+    else:
+        flash('Something went wrong')
     return render_template('search.html', title='Search', recipes=recipes)
 
 
