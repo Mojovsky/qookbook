@@ -25,7 +25,7 @@ def signup():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         if password != confirm_password:
-            flash("Passwords do not match")
+            flash("Passwords do not match", "error")
             return redirect(url_for('signup'))
         else:
             try:
@@ -33,7 +33,7 @@ def signup():
                 login_user(user, remember=True)
                 return redirect(url_for('profile'))
             except Exception as e:
-                flash(f"{e}")
+                flash(f"{e}", "error")
                 return redirect(url_for('signup'))
     return render_template('signup.html', title='Sign Up')
 
@@ -57,7 +57,7 @@ def login():
             login_user(user, remember=True)
             return redirect(url_for('profile'))
         except Exception as e:
-            flash(f"{e}")
+            flash(f"{e}", "error")
             return redirect(url_for('login'))
     return render_template('login.html', title='Login')
 
@@ -91,7 +91,7 @@ def search():
             session['recipes'] = [recipe for recipe in recipes]
             return render_template('search.html', title='Search', recipes=recipes)
         except Exception as e:
-            flash(f"{e}")
+            flash(f"{e}", "error")
             return render_template('search.html', title='Search')
     return render_template('search.html', title='Search')
 
@@ -106,9 +106,9 @@ def add_to_favorites():
     if recipe:
         user_interaction = UserInteraction()
         user_interaction.add_fav_recipe(current_user.id, **recipe)
-        flash('Recipe successfully added to favorites!')
+        flash('Recipe successfully added to favorites!', 'success')
     else:
-        flash('Something went wrong. Try again')
+        flash('Something went wrong. Try again', "error")
     return render_template('search.html', title='Search', recipes=recipes)
 
 
