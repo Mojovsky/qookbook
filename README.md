@@ -1,5 +1,6 @@
 # Qookbook
 
+
 ## Description
 
 Qookbook is a simple project that demonstrates my skills in Python. The project is a cookbook that allows you to search for recipes using the Edamam API. You can also add any recipes to your favorites list, which is located in your profile.
