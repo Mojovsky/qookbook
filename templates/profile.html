@@ -1,9 +1,12 @@
 {% extends "base.html" %} {% block content %}
 <h1>Hello, {{ user.username }}</h1>
 <h3>Here are your recipes:</h3>
-{% for recipe in recipes %}
 <div class="content_box" id="fav_recipes">
-  <p>{{ recipe.title }}</p>
-  <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+  {% for recipe in recipes %}
+  <div id="recipe">
+    <p>{{ recipe.title }}</p>
+    <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a>
+  </div>
+  {% endfor %}
 </div>
-{% endfor %} {% endblock %}
+{% endblock %}

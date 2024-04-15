@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #eaeaed;
+}
+
+nav {
+  background-color: #3a72b5;
+  height: 4rem;
+  padding: 1rem;
+  color: #eaeaed;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+#nav_links a:link,
+#nav_links a:visited,
+#nav_links a:hover,
+#nav_links a:active {
+  color: #eaeaed;
+  text-decoration: none;
+  padding: 10px;
+  font-weight: 600;
+}
+
+.form {
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: large;
+}
+
+h1 {
+  margin: 1rem;
+  padding-bottom: 2rem;
+}
+
+h3 {
+  margin: 1rem;
+}
+
+button {
+  padding: 10px;
+  background-color: #3a72b5;
+  color: #eaeaed;
+  border: none;
+  cursor: pointer;
+  font-size: large;
+}
+
+#fav_btn {
+  padding: 5px;
+  font-size: small;
+}
+
+.content_box {
+  border: 3px solid #3a72b5;
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 50%;
+}
+
+#recipe {
+  padding: 0.5rem;
+  border-bottom: 1px solid #3a72b5;
+}
+
+#recipe a:link,
+#recipe a:visited,
+#recipe a:hover,
+#recipe a:active {
+  color: #3a72b5;
+  text-decoration: none;
+}
+
+.flashes {
+  color: red;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}

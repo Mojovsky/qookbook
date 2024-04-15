@@ -1,19 +1,21 @@
 {% extends "base.html" %} {% block content %}
 <h1>Search</h1>
-<form action="/search" method="POST">
-  <label for="search">Search:</label>
+<form action="/search" method="POST" class="form" id="search_form">
+  <label for="search">Enter your ingridients</label>
   <input type="text" id="search" name="search" required />
-  <input type="submit" value="Search" />
+  <button type="submit">Search</button>
 </form>
-{% for recipe in recipes %}
+{% if recipes %}
 <div class="content_box" id="search_recipes">
-  <div>
+  {% for recipe in recipes %}
+  <div id="recipe">
     <p>{{ recipe.title }}</p>
-    <a href="{{ recipe.url }}">{{ recipe.url }}</a>
+    <a href="{{ recipe.url }}" target="_blank">{{ recipe.url }}</a>
     <form action="/add_to_favorites" method="post">
       <input type="hidden" name="recipe_title" value="{{ recipe.title }}" />
-      <input type="submit" value="Add to Favorites" />
+      <button type="submit" id="fav_btn">Add to Favourites</button>
     </form>
   </div>
+  {% endfor %}
 </div>
-{% endfor %} {% endblock %}
+{% endif %} {% endblock %}
