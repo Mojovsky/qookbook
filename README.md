@@ -20,7 +20,7 @@ Qookbook is a simple project that demonstrates my skills in Python. The project 
 
 4. Get API keys:
 
-- Navigate to `https://www.edamam.com/` and create a free account for Recipe Search API
+- Navigate to https://www.edamam.com/ and create a free account for Recipe Search API
 - Or contact me on Discord either through Turing Discord or directly @Mojovsky
 
 ## Usage
