@@ -85,6 +85,7 @@ def add_to_favorites():
     recipe_title = request.form['recipe_title']
     recipe = user_interaction.temp_recipe_manipulation.get_recipe_object(recipe_title)
     user_interaction.recipe_manipulation.add_fav_recipe(current_user.id, recipe)
+    flash('Recipe successfully added to favorites!')
     recipes = session.get('recipes')
     return render_template('search.html', title='Search', recipes=recipes)
 
