@@ -10,14 +10,16 @@
         "title": "NY Pizza Burger",
         "url": "https://sugarspiceandglitter.com/ny-pizza-burger",
         "users": [
-            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3",
+            "00946c61-c406-4180-8c15-8f5864bb276e"
         ]
     },
     "043294ac-dc2c-40b3-a8fe-a7dbe40de822": {
         "title": "Tuna Confit",
         "url": "https://food52.com/recipes/14171-tuna-confit",
         "users": [
-            "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+            "7bcf3b4e-4493-4bca-897e-baf03298ddc3",
+            "00946c61-c406-4180-8c15-8f5864bb276e"
         ]
     },
     "b96ce25b-ad82-492f-8ad6-61bab0a5e214": {
@@ -25,6 +27,20 @@
         "url": "http://www.seriouseats.com/recipes/2011/07/tuna-avocado-tartare-recipe.html",
         "users": [
             "7bcf3b4e-4493-4bca-897e-baf03298ddc3"
+        ]
+    },
+    "26840400-9d98-42e8-916f-d22f26e02435": {
+        "title": "Ragu Pizza Burgers",
+        "url": "http://www.ragu.com/recipes/detail/38496/1/ragu-pizza-burgers",
+        "users": [
+            "00946c61-c406-4180-8c15-8f5864bb276e"
+        ]
+    },
+    "0d00c729-c041-4bdb-8800-31ad90bacdd4": {
+        "title": "Pizza Burger Sliders",
+        "url": "http://www.ragu.com/recipes/detail/42637/1/pizza-burger-sliders",
+        "users": [
+            "00946c61-c406-4180-8c15-8f5864bb276e"
         ]
     }
 }
