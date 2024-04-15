@@ -14,8 +14,8 @@ class InvalidIngredients(Exception):
 
 def get_recipe_url(ingridients):
     """This function returns the url for the recipe API. It takes a list of ingredients as input and returns the url."""
-    app_id = os.getenv("app_id")
-    app_key = os.getenv("app_key")
+    app_id = os.getenv("app_id") # You need to set the app_id in the .env file, or you can directly assign the values here.
+    app_key = os.getenv("app_key") # You need to set the app_key in the .env file, or you can directly assign the values here.
     base_url = "https://api.edamam.com/api/recipes/v2"
     if isinstance(ingridients, (list, tuple)):
         query = "%2C%20".join(ingridients)
