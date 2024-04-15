@@ -9,12 +9,12 @@ def main():
     user_interaction = UserInteraction()
     #user_interaction.create_user("test2", "test2")
     #user_interaction.create_user("test", "test@gmail.com", "test")
-    user = user_interaction.login("test", "test")
+    user = user_interaction.login("test1", "test1")
     #print(user.id)
     #data_manipulation = DataManipulation("data/recipes.json")
-    recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
-    recipe = recipes[0]
-    user_interaction.add_fav_recipe(user.id, **recipe)
+    #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
+    #recipe = recipes[0]
+    user_interaction.add_fav_recipe("00946c61-c406-4180-8c15-8f5864bb276e", "NY Pizza Burger", "https://sugarspiceandglitter.com/ny-pizza-burger")
     #fav_list = user_interaction.get_fav_recipes(user.id)
     #print(fav_list)
 
@@ -175,8 +175,12 @@ class UserInteraction:
 
     def add_fav_recipe(self, user_id, title, url):
         data = self.recipe_manipulation.read_file()
-        if title in data:
-            data[title]['users'].append(user_id)
+        for recipe_id, recipe_data in data.items():
+            if recipe_data['title'] == title:
+                if user_id not in recipe_data['users']:
+                    recipe_data['users'].append(user_id)
+                self.recipe_manipulation.write_file(data)
+                break
         else:
             id = str(uuid.uuid4())
             recipe = Recipe(id, title, url, [user_id])
