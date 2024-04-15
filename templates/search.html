@@ -10,8 +10,10 @@
   <div>
     <p>{{ recipe.title }}</p>
     <a href="{{ recipe.url }}">{{ recipe.url }}</a>
-    <input type="hidden" name="recipe_title" value="{{ recipe.title }}" />
-    <input type="submit" value="Add to Favorites" />
+    <form action="/add_to_favorites" method="post">
+      <input type="hidden" name="recipe_title" value="{{ recipe.title }}" />
+      <input type="submit" value="Add to Favorites" />
+    </form>
   </div>
 </div>
 {% endfor %}
