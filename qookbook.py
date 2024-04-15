@@ -23,11 +23,16 @@ def signup():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
         if password != confirm_password:
-            return "Passwords do not match"
+            flash("Passwords do not match")
+            return redirect(url_for('signup'))
         else:
-            user = user_interaction.create_user(username, password)
-            login_user(user, remember=True)
-            return redirect(url_for('profile'))
+            try:
+                user = user_interaction.create_user(username, password)
+                login_user(user, remember=True)
+                return redirect(url_for('profile'))
+            except Exception as e:
+                flash(f"{e}")
+                return redirect(url_for('signup'))
     return render_template('signup.html', title='Sign Up')
 
 
@@ -43,10 +48,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user_interaction = UserInteraction()
-        user = user_interaction.login(username, password)
-        if user:
+        try:
+            user = user_interaction.login(username, password)
             login_user(user, remember=True)
             return redirect(url_for('profile'))
+        except Exception as e:
+            flash(f"{e}")
+            return redirect(url_for('login'))
     return render_template('login.html', title='Login')
 
 
@@ -68,8 +76,8 @@ def profile():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    user_interaction = UserInteraction()
     if request.method == 'POST':
+        user_interaction = UserInteraction()
         ingredients = request.form['search']
         recipes = user_interaction.search_recipes(ingredients)
         session['recipes'] = [recipe for recipe in recipes]
@@ -88,7 +96,7 @@ def add_to_favorites():
         user_interaction.add_fav_recipe(current_user.id, **recipe)
         flash('Recipe successfully added to favorites!')
     else:
-        flash('Something went wrong')
+        flash('Something went wrong. Try again')
     return render_template('search.html', title='Search', recipes=recipes)
 
 
