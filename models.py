@@ -9,12 +9,12 @@ def main():
     user_interaction = UserInteraction()
     #user_interaction.create_user("test2", "test2")
     #user_interaction.create_user("test", "test@gmail.com", "test")
-    #user = user_interaction.login("test", "test")
+    user = user_interaction.login("test", "test")
     #print(user.id)
     #data_manipulation = DataManipulation("data/recipes.json")
-    #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
-    #recipe_obj = user_interaction.temp_recipe_manipulation.get_recipe_object("Pasta Primavera")
-    #user_interaction.recipe_manipulation.add_fav_recipe(user.id, recipe_obj)
+    recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
+    recipe = recipes[0]
+    user_interaction.add_fav_recipe(user.id, **recipe)
     #fav_list = user_interaction.get_fav_recipes(user.id)
     #print(fav_list)
 
@@ -87,7 +87,8 @@ class User:
 
 
 class Recipe:
-    def __init__(self, title, url, users=None):
+    def __init__(self, id, title, url, users=None):
+        self.id = id
         self.title = title
         self.url = url
         self.users = users if users else []
@@ -95,7 +96,8 @@ class Recipe:
 
     def to_json(self):
         return {
-            self.title: {
+            self.id: {
+            "title": self.title,
             "url": self.url,
             "users": self.users,
             }
@@ -134,23 +136,9 @@ class DataManipulation:
         return User(id, **user_data)
     
 
-    def get_recipe_object(self, title):
-        recipe_data = self.data[title]
-        return Recipe(title, **recipe_data)
-    
-
-    def create_temp_recipes(self, recipes):
-        self.file_path = "data/temp_recipes.json"
-        self.data = {}
-        for recipe in recipes:
-            recipe = Recipe(**recipe)
-            self.add_object(recipe)
-
-
-    def add_fav_recipe(self, id, recipe_obj):
-        self.file_path = "data/recipes.json"
-        recipe_obj.users.append(id)
-        self.add_object(recipe_obj)
+    def get_recipe_object(self, id):
+        recipe_data = self.data[id]
+        return Recipe(id, **recipe_data)
 
 
 
@@ -158,7 +146,6 @@ class UserInteraction:
     def __init__(self):
         self.user_manipulation = DataManipulation("data/users.json")
         self.recipe_manipulation = DataManipulation("data/recipes.json")
-        self.temp_recipe_manipulation = DataManipulation("data/temp_recipes.json")
 
 
 
@@ -186,12 +173,22 @@ class UserInteraction:
         return user
     
 
-    def get_fav_recipes(self, id):
+    def add_fav_recipe(self, user_id, title, url):
+        data = self.recipe_manipulation.read_file()
+        if title in data:
+            data[title]['users'].append(user_id)
+        else:
+            id = str(uuid.uuid4())
+            recipe = Recipe(id, title, url, [user_id])
+            self.recipe_manipulation.add_object(recipe)
+
+
+    def get_fav_recipes(self, user_id):
         data = self.recipe_manipulation.read_file()
         fav_list = []
-        for title in data:
-            if id in data[title]['users']:
-                recipe_obj = self.recipe_manipulation.get_recipe_object(title)
+        for recipe in data:
+            if user_id in data[recipe]['users']:
+                recipe_obj = self.recipe_manipulation.get_recipe_object(recipe)
                 fav_list.append(recipe_obj)
         return fav_list
         
@@ -200,7 +197,6 @@ class UserInteraction:
         url = api_edamam.get_recipe_url(ingridients)
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
-        self.temp_recipe_manipulation.create_temp_recipes(recipe_data)
         return recipe_data
 
 
