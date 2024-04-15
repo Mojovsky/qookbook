@@ -16,15 +16,4 @@
     </form>
   </div>
 </div>
-{% endfor %}
-<h3>Last Search</h3>
-{% for recipe_title, recipe_data in last_search.items() %}
-<div class="content_box" id="last_search">
-  <div>
-    <p>{{ recipe_title }}</p>
-    <a href="{{ recipe_data['url'] }}">{{ recipe_data['url'] }}</a>
-    <input type="hidden" name="recipe_title" value="{{ recipe_title }}" />
-    <input type="submit" value="Add to Favorites" />
-  </div>
-</div>
 {% endfor %} {% endblock %}
