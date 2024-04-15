@@ -5,19 +5,6 @@ import uuid
 import re
 
 
-def main():
-    user_interaction = UserInteraction()
-    #user_interaction.create_user("test2", "test2")
-    #user_interaction.create_user("test", "test@gmail.com", "test")
-    user = user_interaction.login("test1", "test1")
-    #print(user.id)
-    #data_manipulation = DataManipulation("data/recipes.json")
-    #recipes = user_interaction.search_recipes(["pasta", "mushroom", "tomato"])
-    #recipe = recipes[0]
-    user_interaction.add_fav_recipe("00946c61-c406-4180-8c15-8f5864bb276e", "NY Pizza Burger", "https://sugarspiceandglitter.com/ny-pizza-burger")
-    #fav_list = user_interaction.get_fav_recipes(user.id)
-    #print(fav_list)
-
 
 class User:
     def __init__(self, id, username, password):
@@ -151,8 +138,9 @@ class UserInteraction:
 
     def create_user(self, username, password):
         data = self.user_manipulation.read_file()
-        if username in data:
-            raise ValueError("Username already taken")
+        for id, user_data in data.items():
+            if username == user_data["username"]:
+                raise ValueError("Username already taken")
         id = str(uuid.uuid4())
         user = User(id, username, password)
         self.user_manipulation.add_object(user)
@@ -202,10 +190,3 @@ class UserInteraction:
         data = api_edamam.api_response(url)
         recipe_data = api_edamam.extract_recipe_data(data)
         return recipe_data
-
-
-
-
-
-if __name__ == "__main__":
-    main()
